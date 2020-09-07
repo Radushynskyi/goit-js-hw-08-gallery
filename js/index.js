@@ -5,6 +5,7 @@ const refs = {
     boxModal: document.querySelector(' .js-lightbox'),
     largeImage: document.querySelector('.lightbox__image'),
     clouseModalBtn: document.querySelector('.lightbox__button'),
+    backdropRef: document.querySelector('.lightbox__content'),
 };
 // console.log(refs);
 
@@ -41,17 +42,31 @@ function onGallaryClick(event) {
     const imageRef = event.target;
     refs.largeImage.src = imageRef.dataset.source;
     refs.largeImage.alt = imageRef.alt;
+    window.addEventListener('keydown', onPressEscape)
     refs.boxModal.classList.add('is-open');
 }
 
-function onBtnClick() {
+function clouseModal() {
+    window.removeEventListener('keudown', onPressEscape);
     refs.boxModal.classList.remove('is-open');
     refs.largeImage.src = '';
 }
 
+function onBackDropClick(event) {
+    if (event.target === event.currentTarget) {
+        clouseModal();
+    }
+}
+
+function onPressEscape(event) {
+    if (event.code === 'Escape') {
+      clouseModal();
+    }
+  }
 /* Слушатели событий */
 refs.list.addEventListener('click', onGallaryClick);
-refs.clouseModalBtn.addEventListener('click', onBtnClick);
+refs.clouseModalBtn.addEventListener('click', clouseModal);
+refs.backdropRef.addEventListener('click', onBackDropClick)
 
 /* Действия */
 galleryBuilder(imagesList);
